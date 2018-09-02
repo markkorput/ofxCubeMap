@@ -10,4 +10,5 @@ class ofApp : public ofBaseApp{
 
   private: // attributes
     ofxCubeMap mCubeMap;
+    ofEasyCam mEasyCam;
 };
