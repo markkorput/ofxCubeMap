@@ -87,6 +87,10 @@ class ofxCubeMap
 		void beginDrawingInto3D( GLuint _face );								// Gives you camera looking in the direction of the cube face
 		void endDrawingInto3D();
 
+		#ifdef OFXCUBEMAP_LAMBDAS
+		void drawInto3D(std::function<void()> func);
+		#endif
+
 		// Misc ---------------------
 
 		void debugDrawCubemapCameras();

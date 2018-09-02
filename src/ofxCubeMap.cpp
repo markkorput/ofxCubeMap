@@ -193,6 +193,18 @@ void ofxCubeMap::endDrawingInto3D()
 }
 
 //--------------------------------------------------------------
+#ifdef OFXCUBEMAP_LAMBDAS
+void ofxCubeMap::drawInto3D(std::function<void()> func) {
+	for( int i = 0; i < 6; i++ )
+	{
+		this->beginDrawingInto3D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+		func();
+		this->endDrawingInto3D();
+	}
+}
+#endif
+
+//--------------------------------------------------------------
 void ofxCubeMap::bind( int pos )
 {
 	boundToTextureUnit = pos;
@@ -270,7 +282,6 @@ void ofxCubeMap::debugDrawCubemapCameras()
 	{
 		GLuint face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
 		ofMatrix4x4 modelViewProjectionMatrix = getLookAtMatrixForFace( face ) * getProjectionMatrix();
-
 		ofPushMatrix();
 
 			ofMultMatrix( modelViewProjectionMatrix.getInverse() );
@@ -283,7 +294,6 @@ void ofxCubeMap::debugDrawCubemapCameras()
 			ofFill();
 
 		ofPopMatrix();
-
 	}
 }
 
