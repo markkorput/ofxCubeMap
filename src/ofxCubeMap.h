@@ -88,6 +88,7 @@ class ofxCubeMap
 		void endDrawingInto3D();
 
 		#ifdef OFXCUBEMAP_LAMBDAS
+		void drawInto2D(std::function<void()> func);
 		void drawInto3D(std::function<void()> func);
 		#endif
 

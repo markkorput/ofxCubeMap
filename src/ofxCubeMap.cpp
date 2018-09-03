@@ -165,7 +165,6 @@ void ofxCubeMap::endDrawingInto2D()
 	fbo.end();
 }
 
-
 //--------------------------------------------------------------
 void ofxCubeMap::beginDrawingInto3D( GLuint _face )
 {
@@ -191,6 +190,19 @@ void ofxCubeMap::endDrawingInto3D()
 
 	fbo.end();
 }
+
+//--------------------------------------------------------------
+#ifdef OFXCUBEMAP_LAMBDAS
+void ofxCubeMap::drawInto2D(std::function<void()> func) {
+
+	for( int i = 0; i < 6; i++ )
+	{
+		this->beginDrawingInto2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+		func();
+		this->endDrawingInto2D();
+	}
+}
+#endif
 
 //--------------------------------------------------------------
 #ifdef OFXCUBEMAP_LAMBDAS
