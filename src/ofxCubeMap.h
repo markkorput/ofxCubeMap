@@ -117,6 +117,8 @@ class ofxCubeMap
 		ofMatrix4x4 getProjectionMatrix();
 		ofMatrix4x4 getLookAtMatrixForFace( GLuint _face );
 
+		const ofFbo& getFbo() const { return fbo; }
+
 	private:
 
 		string getDescriptiveStringForFace( GLuint _face );
