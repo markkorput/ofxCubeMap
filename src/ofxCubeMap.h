@@ -120,6 +120,8 @@ class ofxCubeMap
 
 		const ofFbo& getFbo() const { return fbo; }
 
+		void loadFaceCamera(int face, ofCamera& cam) const;
+
 	private:
 
 		string getDescriptiveStringForFace( GLuint _face );

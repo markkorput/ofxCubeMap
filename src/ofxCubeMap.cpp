@@ -761,3 +761,39 @@ void ofxCubeMap::initShader()
 	drawCubeMapShader.linkProgram();
 
 }
+
+
+void ofxCubeMap::loadFaceCamera(int face, ofCamera& cam) const {
+	cam.setPosition(cubeMapCamerasRenderPosition);
+
+	switch ( face )
+	{
+		case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+			cam.setOrientation(ofVec3f(  1.0f,  0.0f,  0.0f));
+			// lookAt.makeLookAtViewMatrix( ofVec3f( 0.0f, 0.0f, 0.0f), , ofVec3f(  0.0f, -1.0f,  0.0f) );
+			break;
+		case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+			cam.setOrientation(ofVec3f( -1.0f,  0.0f,  0.0f));
+			// lookAt.makeLookAtViewMatrix( ofVec3f( 0.0f, 0.0f, 0.0f), , ofVec3f(  0.0f, -1.0f,  0.0f) );
+			break;
+		case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+			cam.setOrientation(ofVec3f(  0.0f,  1.0f,  0.0f));
+			// lookAt.makeLookAtViewMatrix( ofVec3f( 0.0f, 0.0f, 0.0f), , ofVec3f(  0.0f,  0.0f,  1.0f) );
+			break;
+		case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+			cam.setOrientation(ofVec3f(  0.0f, -1.0f,  0.0f));
+			// lookAt.makeLookAtViewMatrix( ofVec3f( 0.0f, 0.0f, 0.0f), , ofVec3f(  0.0f,  0.0f, -1.0f) );
+			break;
+		case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+			cam.setOrientation(ofVec3f(  0.0f,  0.0f,  1.0f));
+			// lookAt.makeLookAtViewMatrix( ofVec3f( 0.0f, 0.0f, 0.0f), , ofVec3f(  0.0f, -1.0f,  0.0f) );
+			break;
+		case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+			cam.setOrientation(ofVec3f(  0.0f,  0.0f, -1.0f));
+			// lookAt.makeLookAtViewMatrix( ofVec3f( 0.0f, 0.0f, 0.0f), , ofVec3f(  0.0f, -1.0f,  0.0f) );
+			break;
+		default:
+			ofLogError() << "ofxCubeMap::getLookAtMatrixForFace, passed in invalid face.";
+			break;
+		}
+}
