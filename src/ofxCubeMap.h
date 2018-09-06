@@ -115,8 +115,9 @@ class ofxCubeMap
 		void setPosition( float _x, float _y, float _z );
 		ofVec3f* getPosition();
 
-		ofMatrix4x4 getProjectionMatrix();
-		ofMatrix4x4 getLookAtMatrixForFace( GLuint _face );
+
+		ofMatrix4x4 getProjectionMatrix() const;
+		ofMatrix4x4 getLookAtMatrixForFace( GLuint _face ) const;
 
 		const ofFbo& getFbo() const { return fbo; }
 
