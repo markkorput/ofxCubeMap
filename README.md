@@ -74,5 +74,20 @@ And then you can draw the 3D scene into it like so:
 		myFboCubeMap.endDrawingInto3D();
 	}
 
+If you use a compiler which supports C++11, you can define the ```OFXCUBEMAP_LAMBDAS``` preprocessor flag to enable lambda features by adding the following line to your config.make;
+```
+PROJECT_DEFINES = OFXCUBEMAP_LAMBDAS
+```
+
+Then the above example to draw your 3D scene into your CubeMap can also be written like this;
+
+```c++
+myFboCubeMap.drawInto3D([](){
+	// this part is executed 6 times;
+	// once for each face of the cubemap
+	ofClear(0,0,0);
+	drawScene();
+});
+```
 
 Examples coming when I get a chance.

@@ -87,6 +87,11 @@ class ofxCubeMap
 		void beginDrawingInto3D( GLuint _face );								// Gives you camera looking in the direction of the cube face
 		void endDrawingInto3D();
 
+		#ifdef OFXCUBEMAP_LAMBDAS
+		void drawInto2D(std::function<void()> func);
+		void drawInto3D(std::function<void()> func);
+		#endif
+
 		// Misc ---------------------
 
 		void debugDrawCubemapCameras();
@@ -110,8 +115,13 @@ class ofxCubeMap
 		void setPosition( float _x, float _y, float _z );
 		ofVec3f* getPosition();
 
-		ofMatrix4x4 getProjectionMatrix();
-		ofMatrix4x4 getLookAtMatrixForFace( GLuint _face );
+
+		ofMatrix4x4 getProjectionMatrix() const;
+		ofMatrix4x4 getLookAtMatrixForFace( GLuint _face ) const;
+
+		const ofFbo& getFbo() const { return fbo; }
+
+		void loadFaceCamera(int face, ofCamera& cam) const;
 
 	private:
 

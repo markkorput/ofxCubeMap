@@ -165,7 +165,6 @@ void ofxCubeMap::endDrawingInto2D()
 	fbo.end();
 }
 
-
 //--------------------------------------------------------------
 void ofxCubeMap::beginDrawingInto3D( GLuint _face )
 {
@@ -179,7 +178,6 @@ void ofxCubeMap::beginDrawingInto3D( GLuint _face )
 	ofSetMatrixMode( OF_MATRIX_MODELVIEW );
 	ofPushMatrix();
 	ofLoadMatrix( getLookAtMatrixForFace( _face ) );
-
 }
 
 //--------------------------------------------------------------
@@ -191,6 +189,31 @@ void ofxCubeMap::endDrawingInto3D()
 
 	fbo.end();
 }
+
+//--------------------------------------------------------------
+#ifdef OFXCUBEMAP_LAMBDAS
+void ofxCubeMap::drawInto2D(std::function<void()> func) {
+
+	for( int i = 0; i < 6; i++ )
+	{
+		this->beginDrawingInto2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+		func();
+		this->endDrawingInto2D();
+	}
+}
+#endif
+
+//--------------------------------------------------------------
+#ifdef OFXCUBEMAP_LAMBDAS
+void ofxCubeMap::drawInto3D(std::function<void()> func) {
+	for( int i = 0; i < 6; i++ )
+	{
+		this->beginDrawingInto3D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + i );
+		func();
+		this->endDrawingInto3D();
+	}
+}
+#endif
 
 //--------------------------------------------------------------
 void ofxCubeMap::bind( int pos )
@@ -270,7 +293,6 @@ void ofxCubeMap::debugDrawCubemapCameras()
 	{
 		GLuint face = GL_TEXTURE_CUBE_MAP_POSITIVE_X + i;
 		ofMatrix4x4 modelViewProjectionMatrix = getLookAtMatrixForFace( face ) * getProjectionMatrix();
-
 		ofPushMatrix();
 
 			ofMultMatrix( modelViewProjectionMatrix.getInverse() );
@@ -283,7 +305,6 @@ void ofxCubeMap::debugDrawCubemapCameras()
 			ofFill();
 
 		ofPopMatrix();
-
 	}
 }
 
@@ -360,7 +381,7 @@ ofVec3f* ofxCubeMap::getPosition()
 }
 
 //--------------------------------------------------------------
-ofMatrix4x4 ofxCubeMap::getProjectionMatrix()
+ofMatrix4x4 ofxCubeMap::getProjectionMatrix() const
 {
 	ofMatrix4x4 perspectiveMatrix;
 	perspectiveMatrix.makePerspectiveMatrix(fov, size/(float)size, nearZ, farZ );
@@ -369,7 +390,7 @@ ofMatrix4x4 ofxCubeMap::getProjectionMatrix()
 }
 
 //--------------------------------------------------------------
-ofMatrix4x4 ofxCubeMap::getLookAtMatrixForFace( GLuint _face )
+ofMatrix4x4 ofxCubeMap::getLookAtMatrixForFace( GLuint _face ) const
 {
 	ofMatrix4x4 lookAt;
 
@@ -396,13 +417,11 @@ ofMatrix4x4 ofxCubeMap::getLookAtMatrixForFace( GLuint _face )
 		default:
 			ofLogError() << "ofxCubeMap::getLookAtMatrixForFace, passed in invalid face.";
 			break;
-    }
+  }
 
 	lookAt.glTranslate( -cubeMapCamerasRenderPosition.x, -cubeMapCamerasRenderPosition.y, -cubeMapCamerasRenderPosition.z );
-
 	return lookAt;
 }
-
 
 //--------------------------------------------------------------
 void ofxCubeMap::drawFace( GLuint _face, float _x, float _y )
@@ -738,4 +757,29 @@ void ofxCubeMap::initShader()
 	drawCubeMapShader.setupShaderFromSource(GL_FRAGMENT_SHADER, shaderFrag );
 	drawCubeMapShader.linkProgram();
 
+}
+
+
+void ofxCubeMap::loadFaceCamera(int face, ofCamera& cam) const {
+	//
+	// look at matrix
+	//
+	ofMatrix4x4 lookAt = getLookAtMatrixForFace(face);
+	ofVec3f eye,center,up;
+	lookAt.getLookAt(eye, center, up, face);
+
+	// cam.setPosition(cubeMapCamerasRenderPosition);
+	cam.setPosition(eye);
+	cam.lookAt(center, up);
+
+	//
+	// Projection matrix
+	//
+	// ofMatrix4x4 mat = getProjectionMatrix();
+	//mat.makePerspectiveMatrix(fov, size/(float)size, nearZ, farZ );
+	//cam.setupPerspective(true /* flip */, fov, nearZ, farZ)
+	cam.setFov(fov);
+	cam.setAspectRatio(1.0f);
+	cam.setNearClip(nearZ);
+	cam.setFarClip(farZ);
 }
